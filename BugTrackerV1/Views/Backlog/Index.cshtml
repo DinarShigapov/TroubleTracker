@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Backlog";
+}
+
+@section PageScripts {
+    <script src="~/js/ui-modals.js"></script>
+}
+@* ************** Content ************** *@
+
+@model BugTrackerV1.Models.ViewModel.BacklogViewModel
+
+<h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Бэклог /</span> Задачи
+</h4>
+
+@if (Model.ActiveSprint != null)
+{
+    <div class="bg-light task-main p-3 rounded-3">
+        <div class="d-flex bd-highlight mb-2">
+            <h2 class="me-auto p-2 bd-highlight">Активный спринт: @Model.ActiveSprint.NameSprint (@Model.ActiveSprint.StartDate.ToShortDateString() - @Model.ActiveSprint.EndDate.ToShortDateString())</h2>
+            <button class="btn btn-secondary" onclick="location.href='@Url.Action("CompleteSprint", new { id = Model.ActiveSprint.Id })'">Завершить</button>
+        </div>
+        <ul class="list-group">
+            @foreach (var task in Model.ActiveSprint.Issue)
+            {
+                <li class="list-group-item d-flex bd-highlight">
+                    <label class="bd-highlight">#@task.Id</label>
+                    <label class="mx-4 bd-highlight">@task.Title</label>
+                    <label class="ms-auto bd-highlight">@task.Status.NameStatus</label>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@foreach (var sprint in Model.FutureSprints)
+{
+    <div class="bg-light task-main p-3 rounded-3">
+        <div class="d-flex bd-highlight mb-2">
+            <h2 class="me-auto p-2 bd-highlight">@sprint.NameSprint (@sprint.StartDate.ToShortDateString() - @sprint.EndDate.ToShortDateString())</h2>
+        </div>
+        <ul class="list-group">
+            @foreach (var task in sprint.Issue)
+            {
+                <li class="list-group-item d-flex bd-highlight">
+                    <label class="bd-highlight">#@task.Id</label>
+                    <label class="mx-4 bd-highlight">@task.Title</label>
+                    <label class="ms-auto bd-highlight">@task.Status.NameStatus</label>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+<div class="my-4 bg-light task-main p-3 rounded-3">
+    <div class="d-flex bd-highlight mb-2">
+        <h2 class="me-auto p-2 bd-highlight">Бэклог</h2>
+        <button class="btn btn-secondary p-2 bd-highlight" onclick="location.href='@Url.Action("CreateSprint", "Backlog")'">Создать спринт</button>
+    </div>
+    <ul class="list-group">
+        @foreach (var task in Model.BacklogTasks)
+        {
+            <li class="list-group-item d-flex bd-highlight">
+                <label class="bd-highlight">#@task.Id</label>
+                <label class="mx-4 bd-highlight">@task.Title</label>
+                <label class="ms-auto bd-highlight">@task.Status.NameStatus</label>
+            </li>
+        }
+    </ul>
+</div>

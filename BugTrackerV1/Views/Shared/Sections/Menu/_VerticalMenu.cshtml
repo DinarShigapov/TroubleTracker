@@ -1,0 +1,112 @@
+@{
+    TempData.Keep();
+    string? currentPage = ViewContext.HttpContext.Request.Path;
+
+    var userClaims = User.Claims;
+    var canEditPage = userClaims.Any(c => c.Type == "Permission" && c.Value == "CanEditPage");
+
+}
+
+<!-- Menu -->
+@* ! Do this simple *@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+
+  @* ! Hide app brand if navbar-full *@
+
+
+    <div class='app-brand site @((@ViewData["navbarFull"] != null && Convert.ToBoolean(@ViewData["navbarFull"])) ? "d-xl-none" : "")'>
+        <img src="~/img/icons/unicons/projecticon.png" id="project-icon" />
+        <div>ProjectTest</div>
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
+    </div>
+
+  <div class="menu-inner-shadow"></div>
+
+  @* ! Full version menu-items *@
+  <ul class="menu-inner py-1">
+
+
+
+    <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">ПЛАНИРОВАНИЕ</span>
+    </li>
+
+
+        <!-- Dashboards -->
+    <li class='menu-item@(currentPage.EndsWith("/") || currentPage.StartsWith("/home") ? " active open" : "")'>
+        <a asp-controller="Home" asp-action="Index" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+            <div>Главная</div>
+        </a>
+    </li>
+
+        <li class='menu-item@((".Backlog.ActiveSprint.Timeline.Reports.Issue").Contains(currentPage == "/" ? currentPage.Replace('/', '-') : currentPage.TrimStart('/').Substring(0, currentPage.IndexOf('/'))) ? " active open" : "")'>
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-layout"></i>
+        <div>Проект</div>
+      </a>
+
+      <ul class="menu-sub">
+
+        <li class='menu-item@(currentPage == "/Backlog" ? " active" : "")'>
+          <a asp-controller="Backlog" asp-action="Index" class="menu-link">
+            <div>Бэклог</div>
+          </a>
+        </li>
+        <li class='menu-item@(currentPage == "/Timeline" ? " active" : "")'>
+          <a asp-controller="Timeline" asp-action="Index" class="menu-link">
+            <div>Хронология</div>
+          </a>
+        </li>
+        <li class='menu-item@(currentPage == "/ActiveSprint" ? " active" : "")'>
+          <a asp-controller="ActiveSprint" asp-action="Index" class="menu-link">
+            <div>Активные спринты</div>
+          </a>
+        </li>
+        <li class='menu-item@(currentPage == "/Reports" ? " active" : "")'>
+          <a asp-controller="Reports" asp-action="Index" class="menu-link">
+            <div>Отчеты</div>
+          </a>
+        </li>
+        <li class='menu-item@(currentPage == "/Issue" ? " active" : "")'>
+          <a asp-controller="Issue" asp-action="Index" class="menu-link">
+            <div>Задачи</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+
+
+    <li class="menu-header small text-uppercase">
+      <span class="menu-header-text">Другое</span>
+    </li>
+    
+    <li class='menu-item@(currentPage.StartsWith("/Pages/Misc") ? " active open" : "")'>
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+        <div>Разное</div>
+      </a>
+      <ul class="menu-sub">
+        
+      </ul>
+    </li>
+
+    <li class="menu-item">
+      <a href='@TempData.Peek("support")' target="_blank" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-support"></i>
+        <div>Поддержка</div>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href='@TempData.Peek("documentation")' target="_blank" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-file"></i>
+        <div>Документация</div>
+      </a>
+    </li>
+  </ul>
+
+</aside>
+<!-- / Menu -->

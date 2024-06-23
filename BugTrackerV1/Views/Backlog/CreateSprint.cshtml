@@ -1,0 +1,49 @@
+﻿@model BugTrackerV1.Models.ViewModel.SprintViewModel
+@{
+    ViewData["Title"] = "Создание спринта";
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var startDateInput = document.querySelector("[name='StartDate']");
+            var endDateInput = document.querySelector("[name='EndDate']");
+
+            startDateInput.addEventListener("change", function () {
+                var startDate = new Date(startDateInput.value);
+                var minEndDate = new Date(startDate);
+                minEndDate.setDate(minEndDate.getDate() + 1);
+                endDateInput.min = minEndDate.toISOString().split("T")[0];
+            });
+        });
+    </script>
+}
+
+
+<div class="container-fluid">
+    <div class="bg-light task-main p-3 rounded-3">
+        <h2 class="my-3">@ViewData["Title"]</h2>
+        <form asp-action="CreateSprint" method="post" class="form-horizontal">
+            <div class="form-group">
+                <label asp-for="NameSprint" class="control-label"></label>
+                <input asp-for="NameSprint" class="form-control" />
+                <span asp-validation-for="NameSprint" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Создать" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+</div>
+

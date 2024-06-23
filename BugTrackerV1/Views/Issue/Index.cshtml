@@ -1,0 +1,85 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/css/pages/issue-style.css" asp-append-version="true" />
+}
+@section VendorScripts {
+    <script src="~/vendor/js/issue-script.js" asp-append-version="true"></script>
+}
+
+<div class="container-fluid">
+    <div class="bg-light p-4 rounded-3">
+        <div>
+            <form asp-controller="Issue" asp-action="Index">
+                <div class="input-group mb-3">
+                    <input id="searchInput" name="SearchString" type="search" class="form-control" placeholder="Поиск..." aria-label="Search..." aria-describedby="search-addon" oninput="filterTable()" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-outline-secondary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <a class="btn btn-outline-secondary" href="@Url.Action("Create", "Issue")" role="button">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Id</th>
+                        <th>Название</th>
+                        <th>Автор</th>
+                        <th>Исполнитель</th>
+                        <th>Приоритет</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody id="issueTableBody">
+                    @foreach (var issue in Model)
+                    {
+                        <tr class="alert" role="alert">
+                            <td><span>#@issue.Id</span></td>
+                            <td>
+                                <div class="email">
+                                    <span>
+                                        <a href="@Url.Action("Detail", "Issue", new {issueId = issue.Id})">@issue.Title</a>
+                                    </span>
+                                </div>
+                            </td>
+                            <td><div class="email"><span>@issue.CreatedByFullName</span></div></td>
+                            <td>
+                                <div>
+                                    @if (issue.AssignedTo == null)
+                                    {
+                                        <span>—</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@issue.AssignedToFullName</span>
+                                    }
+                                </div>
+                            </td>
+                            <td class="status">
+                                <div class="priority row justify-content-start">
+                                    <div class="icon col-1">
+                                        <img class="priority-icon" src="@issue.PriorityImage" title="@issue.Priority" />
+                                    </div>
+                                    <div class="col-2">@(issue.Priority)</div>
+                                </div>
+                            </td>
+                            <td class="status">
+                                @issue.Status
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

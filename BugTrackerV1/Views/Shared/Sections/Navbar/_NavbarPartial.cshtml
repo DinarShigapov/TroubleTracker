@@ -1,0 +1,101 @@
+@using System.Security.Claims
+@using BugTrackerV1.Models
+@{
+    int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+    bool isMenu = ViewData["isMenu"] != null && Convert.ToBoolean(ViewData["isMenu"]);
+}
+
+@if (ViewData["navbarFull"] != null)
+{
+<div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4">
+<a asp-controller="Dashboards" asp-action="Index" class="app-brand-link gap-2">
+    <span class="app-brand-logo demo">
+    @await Html.PartialAsync("../_Partials/_Macros")
+    </span>
+    <span class="app-brand-text demo menu-text fw-bold">@TempData.Peek("appName")</span>
+</a>
+</div>
+}
+
+@if (ViewData["navbarHideToggle"] == null)
+{
+<div class="layout-menu-toggle navbar-nav align-items-xl-center me-xl-0 d-xl-none">
+<a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+    <i class="bx bx-menu bx-sm"></i>
+</a>
+</div>
+}
+
+<div class='logo @((@ViewData["navbarFull"] != null && Convert.ToBoolean(@ViewData["navbarFull"])) ? "d-xl-none" : "")'>
+    <a asp-controller="Home" asp-action="Index" class="app-brand-link">
+        <span class="app-brand-logo site">
+            @await Html.PartialAsync("../_Partials/_Macros")
+        </span>
+        <span class="app-brand-text site menu-text fw-bold ms-2">@TempData.Peek("appName")</span>
+    </a>
+</div>
+
+@if(isMenu)
+{
+    <div style="margin-inline-start: 10px">
+        <button onclick="window.location.href = '@Url.Action("Create", "Issue")'" type="button" class="btn btn-primary">
+            Создать
+        </button>
+    </div>
+
+}
+
+<div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+<ul class="navbar-nav flex-row align-items-center ms-auto">
+    <!-- User -->
+    <li class="nav-item navbar-dropdown dropdown-user dropdown">
+    <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+        <div class="avatar avatar-online">
+        <img src="~/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle">
+        </div>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+        <a class="dropdown-item" href="javascript:void(0);">
+            <div class="d-flex">
+            <div class="flex-shrink-0 me-3">
+                <div class="avatar avatar-online">
+                <img src="~/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle">
+                </div>
+            </div>
+            <div class="flex-grow-1">
+                <span class="fw-medium d-block">@User.Identity.Name</span>
+                <small class="text-muted">@User.FindFirst("Role")?.Value</small>
+            </div>
+            </div>
+        </a>
+        </li>
+        <li>
+        <div class="dropdown-divider"></div>
+        </li>
+        <li>
+        <a class="dropdown-item" href="javascript:void(0);">
+            <i class="bx bx-user me-2"></i>
+            <span class="align-middle">Профиль</span>
+        </a>
+        </li>
+        <li>
+        <a asp-controller="Account" asp-action="Settings" class="dropdown-item">
+            <i class="bx bx-cog me-2"></i>
+            <span class="align-middle">Настройки</span>
+        </a>
+        </li>
+        <li>
+        <div class="dropdown-divider"></div>
+        </li>
+        <li>
+        <a asp-controller="Authentications" asp-action="Logout" class="dropdown-item">
+            <i class="bx bx-power-off me-2"></i>
+            <span class="align-middle">Выйти</span>
+        </a>
+        </li>
+    </ul>
+    </li>
+    <!--/ User -->
+</ul>
+</div>

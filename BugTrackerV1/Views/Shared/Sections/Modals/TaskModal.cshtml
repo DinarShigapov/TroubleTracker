@@ -1,0 +1,152 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Создание задачи</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <form id="taskForm">
+                                <input name="__RequestVerificationToken" type="hidden"  />
+                                <div class="form-group">
+                                    <label for="taskName">Название задачи:</label>
+                                    <input type="text" class="form-control" id="taskName" placeholder="Введите название задачи">
+                                </div>
+                                <div class="form-group">
+                                    <label for="taskDescription">Описание задачи:</label>
+                                    <input class="form-control" id="taskDescription" rows="3" placeholder="Введите описание задачи"></input>
+                                </div>
+                                <div class="form-group">
+                                    <label for="taskDueDate">Срок выполнения:</label>
+                                    <input type="date" class="form-control" id="taskDueDate">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Дополнительная информация</h5>
+                                    <div class="form-group">
+                                        <label for="taskAssignee">Исполнитель:</label>
+                                        <select class="form-control" id="taskAssignee">
+                                            <option>Выберите исполнителя</option>
+                                            <option>Исполнитель 1</option>
+                                            <option>Исполнитель 2</option>
+                                            <option>Исполнитель 3</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="taskAuthor">Автор:</label>
+                                        <select class="form-control" id="taskAuthor">
+                                            <option>Выберите автора</option>
+                                            <option>Автор 1</option>
+                                            <option>Автор 2</option>
+                                            <option>Автор 3</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="taskLabels">Метки:</label>
+                                        <select class="form-control" id="taskLabels" multiple>
+                                            <option>Метка 1</option>
+                                            <option>Метка 2</option>
+                                            <option>Метка 3</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="taskPriority">Приоритет:</label>
+                                        <select class="form-control" id="taskPriority">
+                                            <option>Выберите приоритет</option>
+                                            <option>Высокий</option>
+                                            <option>Средний</option>
+                                            <option>Низкий</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="taskStatus">Статус:</label>
+                                        <select class="form-control" id="taskStatus">
+                                            <option>Выберите статус</option>
+                                            <option>Готово</option>
+                                            <option>В работе</option>
+                                            <option>На рассмотрении</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="taskType">Тип задачи:</label>
+                                        <select class="form-control" id="taskType">
+                                            <option>Выберите тип задачи</option>
+                                            <option>Задача</option>
+                                            <option>Баг</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="saveButton">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modalElement = document.getElementById('modalCenter');
+        const saveButton = document.getElementById('saveButton');
+
+        // Очистка полей формы при закрытии модального окна
+        modalElement.addEventListener('hidden.bs.modal', function () {
+            modalElement.querySelectorAll('input, textarea, select').forEach(field => {
+                if (field.type === 'select-multiple') {
+                    field.selectedIndex = 0;
+                } else if (field.type === 'select-one' || field.type === 'text' || field.type === 'date') {
+                    field.value = '';
+                }
+            });
+        });
+
+        // Обработчик сохранения данных
+        saveButton.addEventListener('click', function () {
+            const formData = {
+                taskName: document.getElementById('taskName').value,
+                taskDescription: document.getElementById('taskDescription').value,
+                taskDueDate: document.getElementById('taskDueDate').value,
+                taskAssignee: document.getElementById('taskAssignee').value,
+                taskAuthor: document.getElementById('taskAuthor').value,
+                taskLabels: Array.from(document.getElementById('taskLabels').selectedOptions).map(option => option.value),
+                taskPriority: document.getElementById('taskPriority').value,
+                taskStatus: document.getElementById('taskStatus').value,
+                taskType: document.getElementById('taskType').value,
+            };
+
+            fetch('/tasks/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Закрыть модальное окно и очистить поля
+                    bootstrap.Modal.getInstance(modalElement).hide();
+                } else {
+                    alert('Ошибка при сохранении данных');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+

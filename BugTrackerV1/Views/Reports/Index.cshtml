@@ -1,0 +1,53 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model BugTrackerV1.Models.ViewModel.ReportViewModel
+<div class="container-fluid ">
+
+    <div class="row bg-light p-3 task-main rounded-3">
+        <h1>Отчеты</h1>
+
+        <p>Total Issues: @Model.IssueCount</p>
+        <p>Open Issues: @Model.OpenIssueCount</p>
+        <p>Closed Issues: @Model.ClosedIssueCount</p>
+        <p>In Progress Issues: @Model.InProgressIssueCount</p>
+
+        <h2>Задачи в спринте</h2>
+        <div id="sprintChart">
+            @foreach (var item in Model.IssuesBySprint)
+            {
+                <div>
+                    <p>@item.Key @item.Value</p>
+                </div>
+            }
+        </div>
+
+        <h2>Задачи пользователя</h2>
+        <div id="userChart">
+            @foreach (var item in Model.IssuesByUser)
+            {
+                <div>
+                    <p>@item.Key @item.Value</p>
+                </div>
+            }
+        </div>
+
+        <h2>Задачи проекте</h2>
+        <div id="projectChart">
+            @foreach (var item in Model.IssuesByProject)
+            {
+                <div>
+                    <p>@item.Key @item.Value</p>
+                </div>
+            }
+        </div>
+@*         <form method="post" action="/Reports/DownloadHtmlReport">
+            <button type="submit">Download Report as HTML</button>
+        </form> *@
+    </div>
+
+</div>
+

@@ -1,0 +1,68 @@
+﻿
+#fileList {
+    display: inline-block;
+}
+
+#scrollable {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.textareaIssue {
+    min-height: 150px;
+}
+
+
+.attachment-box {
+    position: relative;
+    display: inline-block;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    width: 130px;
+    height: 130px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.attachment-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.attachment-file  {
+    width: 100%;
+    height: 100%;
+    background: gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.attachment-box p {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+}
+
+.remove-button {
+    position: absolute;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    right: 0px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 0px 0px 0px 5px;
+    cursor: pointer;
+}

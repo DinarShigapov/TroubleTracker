@@ -1,0 +1,143 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+@using BugTrackerV1.Models;
+@model BugTrackerV1.Models.ViewModel.IssueVM.EditIssueViewModel
+
+@section VendorScripts {
+    <script src="~/vendor/js/issue-script.js"></script>
+}
+
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/css/pages/issue-style.css" />
+}
+
+<div class="container-fluid">
+    <form asp-action="Create" asp-controller="Issue" id="issueForm" method="post" enctype="multipart/form-data" asp-antiforgery="true">
+        <div class="row bg-light task-main rounded-3">
+            <div class="container py-2">
+                <h5 class="py-3">Создание задачи</h5>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group py-2">
+                            <label asp-for="Title">Название задачи:</label>
+                            <input asp-for="Title" class="form-control" placeholder="Введите название задачи" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group py-2">
+                            <label asp-for="Description">Описание задачи:</label>
+                            <textarea class="form-control textareaIssue" asp-for="Description" rows="3" placeholder="Введите описание задачи"></textarea>
+                        </div>
+                        <div class="form-group py-2">
+                            <input type="file" id="fileInput" asp-for="Attachments" />
+                            <div id="scrollable">
+                                <div id="fileList"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Дополнительная информация</h5>
+                                <div class="form-group">
+                                    <label asp-for="AssignedToId">Исполнитель:</label>
+                                    <select class="form-control" asp-for="AssignedToId" asp-items="Model.AssignedToBy">
+                                        <option value="NOSELECTEDVALUE">Выберите исполнителя</option>
+                                    </select>
+                                </div>
+                               
+                                <div class="form-group">
+                                    <label asp-for="PriorityId">Приоритет:</label>
+                                    <select class="form-control" asp-for="PriorityId" asp-items="Model.Priority">
+                                        <option value="NOSELECTEDVALUE">Выберите приоритет</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="TypeId">Тип задачи:</label>
+                                    <select class="form-control" asp-for="TypeId" asp-items="Model.Type">
+                                        <option value="NOSELECTEDVALUE">Выберите тип задачи</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="py-3 container">
+                <div class="row justify-content-end">
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-outline-secondary">Закрыть</button>
+                        <button type="submit" class="btn btn-primary" id="saveButton">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div><div class="container-fluid">
+    <form asp-action="Create" asp-controller="Issue" id="issueForm" method="post" enctype="multipart/form-data" asp-antiforgery="true">
+        <div class="row bg-light task-main rounded-3">
+            <div class="container py-2">
+                <h5 class="py-3">Создание задачи</h5>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group py-2">
+                            <label asp-for="Title">Название задачи:</label>
+                            <input asp-for="Title" class="form-control" placeholder="Введите название задачи" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group py-2">
+                            <label asp-for="Description">Описание задачи:</label>
+                            <textarea class="form-control textareaIssue" asp-for="Description" rows="3" placeholder="Введите описание задачи"></textarea>
+                        </div>
+                        <div class="form-group py-2">
+                            <input type="file" id="fileInput" asp-for="Attachments" />
+                            <div id="scrollable">
+                                <div id="fileList"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Дополнительная информация</h5>
+                                <div class="form-group">
+                                    <label asp-for="AssignedToId">Исполнитель:</label>
+                                    <select class="form-control" asp-for="AssignedToId" asp-items="Model.AssignedToBy">
+                                        <option value="NOSELECTEDVALUE">Выберите исполнителя</option>
+                                    </select>
+                                </div>
+                             
+                                <div class="form-group">
+                                    <label asp-for="PriorityId">Приоритет:</label>
+                                    <select class="form-control" asp-for="PriorityId" asp-items="Model.Priority">
+                                        <option value="NOSELECTEDVALUE">Выберите приоритет</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="TypeId">Тип задачи:</label>
+                                    <select class="form-control" asp-for="TypeId" asp-items="Model.Type">
+                                        <option value="NOSELECTEDVALUE">Выберите тип задачи</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="py-3 container">
+                <div class="row justify-content-end">
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-outline-secondary">Закрыть</button>
+                        <button type="submit" class="btn btn-primary" id="saveButton">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

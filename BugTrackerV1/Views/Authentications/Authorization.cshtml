@@ -1,0 +1,72 @@
+﻿@{
+    Layout = "_BlankLayout";
+    ViewData["Title"] = "Login Basic - Pages";
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/vendor/css/pages/page-auth.css">
+}
+
+
+@model BugTrackerV1.Models.ViewModel.LoginViewModel;
+
+@* ************** Content ************** *@
+
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+            <!-- Register -->
+            <div class="card">
+                <div class="card-body">
+                    <!-- Logo -->
+@*                     <div class="app-brand justify-content-center">
+                        <a href="/" class="app-brand-link gap-2">
+                            <span class="app-brand-logo demo">@await Html.PartialAsync("../_Partials/_Macros")</span>
+                            <span class="app-brand-text demo text-body fw-bold">@TempData.Peek("appName")</span>
+                        </a>
+                    </div> *@
+                    <!-- /Logo -->
+                    <h5 class="mb-2">Добро пожаловать в @TempData.Peek("appName")! 👋</h5>
+                    <p class="mb-4">Пожалуйста, войдите в свою учетную запись.</p>
+
+                    <form id="formAuthentication" asp-action="Authorization" class="mb-3" method="POST">
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" id="email" name="email" placeholder="Введите свой адрес электронной почты" autofocus>
+                        </div>
+                        <div class="mb-3 form-password-toggle">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" asp-for="Password">Пароль</label>
+                                <a href="/Auth/ForgotPasswordBasic">
+                                    <small>Забыли пароль?</small>
+                                </a>
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <input asp-for="Password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="remember-me">
+                                <label class="form-check-label" for="remember-me">
+                                    Запомнить
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary d-grid w-100" type="submit">Войти</button>
+                        </div>
+                    </form>
+
+                    <p class="text-center">
+                        <a href="/Authentications/Registration">
+                            <span>Создать учетную запись</span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <!-- /Register -->
+        </div>
+    </div>
+</div>

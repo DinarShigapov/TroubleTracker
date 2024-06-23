@@ -1,0 +1,84 @@
+﻿/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.task-sidebar {
+    width: 25%;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+}
+
+.task-sidebar h4 {
+    margin-bottom: 10px;
+}
+
+.task-sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.task-sidebar li {
+    margin-bottom: 10px;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.task-item:hover {
+    background-color: #eee;
+}
+
+.task-main {
+
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.task-details {
+    width: 75%;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.comment {
+    padding: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.task-info p, .task-info span {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.btn-group .btn {
+    margin-right: 5px;
+}
+
+
+.status-select {
+    background-color: #ADD8E6;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+}

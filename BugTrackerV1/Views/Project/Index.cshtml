@@ -1,0 +1,55 @@
+﻿@{
+    Layout = "_ContentNavbarLayout";
+    ViewData["isMenu"] = false; // Отключаем боковое меню
+    ViewData["Title"] = "Settings - Account";
+}
+
+@section PageScripts {
+    <script src="~/js/pages-account-settings-account.js"></script>
+    <link rel="stylesheet" href="~/vendor/css/pages/page-project.css">
+}
+
+@model List<BugTrackerV1.Models.Project>
+
+
+<div class="container">
+    <h1>Проекты</h1>
+    <div class="search-bar">
+        <input type="text" placeholder="Поиск проектов">
+    </div>
+    <div class="actions">
+        <button class="btn-create">Создать проект</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Ключ</th>
+                <th>Тип</th>
+                <th>Руководитель</th>
+                <th>Дополнительные действия</th>
+            </tr>
+        </thead>
+        <tbody >
+            @foreach (var project in Model)
+            {
+                <tr>
+                    <td>
+                        <form asp-action="Select" method="post" class="hidden">
+                            <input type="hidden" name="projectId" value="@project.Id" />
+                            <a href="#" class="project-link" onclick="this.closest('form').submit(); return false;">
+                                @project.NameProject
+                            </a>
+                        </form>
+                    </td>
+                    <td>@project.KeyProject</td>
+                    <td>FSDFDSFSDF</td>
+                    <td>
+                        @project.User.LastName
+                    </td>
+                    <td><a href="#">...</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

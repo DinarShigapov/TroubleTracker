@@ -1,0 +1,88 @@
+@{
+    Layout = "_ContentNavbarLayout";
+    ViewData["isMenu"] = false; // Отключаем боковое меню
+    ViewData["Title"] = "Settings - Account";
+}
+
+@section PageScripts {
+<script src="~/js/pages-account-settings-account.js"></script>
+}
+
+@* ************** Content ************** *@
+<h4 class="py-3 mb-4">
+  <span class="text-muted fw-light">Аккаунт /</span> Настройка аккаунта
+</h4>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card mb-4">
+      <h5 class="card-header">Profile Details</h5>
+      <!-- Account -->
+      <div class="card-body">
+        <div class="d-flex align-items-start align-items-sm-center gap-4">
+          <img src="~/img/avatars/1.png" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
+          <div class="button-wrapper">
+            <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+              <span class="d-none d-sm-block">Обновить</span>
+              <i class="bx bx-upload d-block d-sm-none"></i>
+              <input type="file" id="upload" class="account-file-input" hidden accept="image/png, image/jpeg" />
+            </label>
+            <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
+              <i class="bx bx-reset d-block d-sm-none"></i>
+              <span class="d-none d-sm-block">Отменить</span>
+            </button>
+
+            <p class="text-muted mb-0">Разрешены форматы JPG, GIF или PNG. Максимальный размер - 800 КБ</p>
+          </div>
+        </div>
+      </div>
+      <hr class="my-0">
+      <div class="card-body">
+        <form id="formAccountSettings" method="POST" onsubmit="return false">
+          <div class="row">
+            <div class="mb-3 col-md-4">
+              <label for="firstName" class="form-label">Фамилия</label>
+              <input class="form-control" type="text" id="lastname" name="Фамилия" value="Шигапов" autofocus />
+            </div>
+            <div class="mb-3 col-md-4">
+              <label for="lastName" class="form-label">Имя</label>
+              <input class="form-control" type="text" name="Имя" id="firstname" value="Динар" />
+            </div>
+            <div class="mb-3 col-md-4">
+              <label for="lastName" class="form-label">Отчество</label>
+              <input class="form-control" type="text" name="отчество" id="patronymic" value="Ринатович" />
+            </div>
+            <div class="mb-3 col-md-6">
+              <label for="email" class="form-label">E-mail</label>
+              <input class="form-control" type="text" id="email" name="email" value="dinar.shigapov&#64;example.ru" placeholder="dinar.shigapov&#64;example.ru" />
+            </div>
+            <div class="mb-3 col-md-6">
+                <label class="form-label" for="phoneNumber">Телефон</label>
+                <div class="input-group input-group-merge">
+                    <span class="input-group-text">RU (+7)</span>
+                    <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="9999999999" />
+                </div>
+            </div>
+            <div class="mb-3 col-md-6">
+              <label for="organization" class="form-label">Организация</label>
+                            <input type="text" class="form-control" id="organization" name="организация" value='@TempData.Peek("authorName")' />
+            </div>
+            <div class="mb-3 col-md-6">
+              <label for="address" class="form-label">Адрес</label>
+              <input type="text" class="form-control" id="address" name="адрес" placeholder="Адрес" />
+            </div>
+            <div class="mb-3 col-md-6">
+              <label for="state" class="form-label">Город</label>
+              <input class="form-control" type="text" id="state" name="город" placeholder="Казань" />
+            </div>
+          </div>
+          <div class="mt-2">
+            <button type="submit" class="btn btn-primary me-2">Сохранить</button>
+            <button type="reset" class="btn btn-outline-secondary">Отменить</button>
+          </div>
+        </form>
+      </div>
+      <!-- /Account -->
+    </div>
+  </div>
+</div>
