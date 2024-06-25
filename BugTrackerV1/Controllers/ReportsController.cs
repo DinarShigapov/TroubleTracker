@@ -22,7 +22,8 @@ namespace BugTrackerV1.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var issues = await _context.Issue.ToListAsync();
+            var projectId = int.Parse(User.FindFirst("SelectedProjectId").Value);
+            var issues = await _context.Issue.Where(x => x.ProjectId == projectId).ToListAsync();
 
             var viewModel = new ReportViewModel
             {
@@ -31,7 +32,7 @@ namespace BugTrackerV1.Controllers
                 ClosedIssueCount = issues.Count(i => i.StatusId == 2),
                 InProgressIssueCount = issues.Count(i => i.StatusId == 3),
                 IssuesBySprint = issues.Where(x => x.SprintId != null).GroupBy(i => i.Sprint.NameSprint).ToDictionary(g => g.Key, g => g.Count()),
-                IssuesByUser = issues.Where(x => x.SprintId != null).GroupBy(i => i.AssignedTo.LastName).ToDictionary(g => g.Key, g => g.Count()),
+                IssuesByUser = issues.Where(x => x.SprintId != null).GroupBy(i => i.AssignedTo.ShortNameUser).ToDictionary(g => g.Key, g => g.Count()),
                 IssuesByProject = issues.Where(x => x.SprintId != null).GroupBy(i => i.Sprint.Project.NameProject).ToDictionary(g => g.Key, g => g.Count())
             };
 

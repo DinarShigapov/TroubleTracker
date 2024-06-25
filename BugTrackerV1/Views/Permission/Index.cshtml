@@ -1,7 +1,7 @@
 ﻿@model BugTrackerV1.Models.ViewModel.PermissionVM.PermissionViewModel;
 
 @{
-    ViewData["Title"] = "Manage Permissions";
+    ViewData["Title"] = "Управление правами";
     Layout = "_ContentNavbarLayout";
     ViewData["isMenu"] = false; // Отключаем боковое меню
 }
@@ -11,6 +11,13 @@
 }
 
 
+
+<img class="position-absolute start-50 translate-middle" src="~/img/icons/gearIcon.svg" style="
+    top: 464px;
+    z-index: -1;
+    height: 469px;
+    opacity: 0.025;">
+
 <h2>Управление правами</h2>
 
 <div class="container">
@@ -19,7 +26,7 @@
             <h3>Роли</h3>
             <div class="card mb-3">
                 <form id="roleForm">
-                    <select id="roleSelect" class="form-control">
+                    <select id="roleSelect" tabindex="1" class="form-control">
                         <option value="">Выберите роль</option>
                         @foreach (var role in Model.AllRoles)
                         {

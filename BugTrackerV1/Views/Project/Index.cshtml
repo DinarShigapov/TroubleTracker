@@ -1,7 +1,7 @@
 ﻿@{
     Layout = "_ContentNavbarLayout";
     ViewData["isMenu"] = false; // Отключаем боковое меню
-    ViewData["Title"] = "Settings - Account";
+    ViewData["Title"] = "Список проектов";
 }
 
 @section PageScripts {
@@ -17,8 +17,9 @@
 @model List<BugTrackerV1.Models.Project>
 
 
-<div class="container">
-    <div class="d-flex bd-highlight mb-2">
+
+<div class="card  p-3">
+    <div class="d-flex mb-2">
         <h1 class="me-auto p-2 bd-highlight">Проекты</h1>
         <button class="btn btn-primary buttonSize" onclick="location.href='@Url.Action("Create", "Project")'">Создать проект</button>
     </div>
@@ -57,4 +58,10 @@
             }
         </tbody>
     </table>
+</div>
+
+<div class="card p-3 my-2">
+    <h1 class="me-auto pt-2 bd-highlight">Настройки</h1>
+    <a href="@Url.Action("Index", "Permission")">● Управление правами</a>
+    <a href="@Url.Action("Index", "Roles")">● Управление ролями</a>
 </div>

@@ -1,9 +1,5 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-    
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Активный спринт";
 }
 @section VendorStyles {
     <link rel="stylesheet" href="~/vendor/css/pages/app-kanban.css" asp-append-version="true" />
@@ -27,7 +23,22 @@
                         <div id="card@(tasks.Id)" class="kanban-card" draggable="true" data-card-id="@tasks.Id">
                             <div class="content">
                                 <div class="text">
-                                    <div class="title">@(tasks.Title)</div>
+                                    <div class="row justify-content-between">
+                                        <div class="col">
+                                            <div class="title">@(tasks.Title)</div>
+                                        </div>
+                                        <div class="col-1 px-4">
+                                            <div class="dropdown">
+                                                <button class="btn p-0" type="button" id="orderStatistics" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="orderStatistics">
+                                                    <a class="dropdown-item" href="@Url.Action("Detail", "Issue", new {issueId = tasks.Id})">Просмотреть</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="priority row justify-content-start">
                                         <div class="icon col-1">
                                             <img class="priority-icon" src="@tasks.PriorityImage" title="@tasks.Priority" />

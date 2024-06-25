@@ -1,0 +1,54 @@
+﻿@model BugTrackerV1.Models.ViewModel.RoleVM.AssignRoleViewModel;
+@{
+    ViewData["Title"] = "Назначить роль";
+    Layout = "_ContentNavbarLayout";
+    ViewData["isMenu"] = false;
+}
+<h2>Назначение роли</h2>
+
+<div class="card m-3 p-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Роль</th>
+                <th>Назначить роль</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.FirstName @user.LastName</td>
+                    <td>
+                        @if (user.UserRoles.Any(x => x.UserId == user.Id))
+                        {
+                            @user.UserRoles.FirstOrDefault()?.Role.NameRole
+                        }
+                    </td>
+                    <td>
+                        <form method="post" asp-action="Assign">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="hidden" name="SelectedUserId" value="@user.Id" />
+                                    <select name="SelectedRoleId" class="form-control">
+                                        <option value="0">Отсутствует</option>
+                                        @foreach (var role in Model.Roles)
+                                        {
+                                            <option value="@role.Id">@role.NameRole</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <button type="submit" class="btn btn-primary">+</button>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button onclick="location.href='@Url.Action("Create", "Roles")'" style="width: 170px;" class="btn btn-primary my-2">Создать роль</button>
+</div>
+

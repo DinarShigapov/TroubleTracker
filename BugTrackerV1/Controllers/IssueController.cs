@@ -150,6 +150,20 @@ namespace BugTrackerV1.Controllers
                         _context.Add(issueAttachment);
                     }
                 }
+
+                if (viewModel.Labels.Count() > 0)
+                {
+                    foreach (var item in viewModel.Labels)
+                    {
+                        var labelsIssue = new LabelIssue()
+                        {
+                            Issue = issue,
+                            LabelId = item.Id,
+                        };
+
+                        _context.Add(labelsIssue);
+                    }
+                }
             }
 
             await _context.SaveChangesAsync();
