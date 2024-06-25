@@ -114,6 +114,8 @@ namespace BugTrackerV1.Controllers
                     PasswordHash = model.Password
                 };
 
+                _context.User.Add(newUser);
+                _context.SaveChangesAsync();
 
                 return RedirectToAction("Authorization");
             }

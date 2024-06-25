@@ -1,6 +1,6 @@
 ﻿using BugTrackerV1.Models;
 using BugTrackerV1.Models.ViewModel;
-using BugTrackerV1.Models.ViewModel.Issue;
+using BugTrackerV1.Models.ViewModel.IssueVM;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,17 +14,20 @@ namespace BugTrackerV1.Controllers
     {
         private readonly ApplicationContext _context;
         private readonly IWebHostEnvironment _environment;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         private readonly string _uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
-        public IssueController(ApplicationContext context, IWebHostEnvironment environment)
+        public IssueController(ApplicationContext context, IWebHostEnvironment environment, IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _environment = environment;
+            _contextAccessor = contextAccessor;
         }
 
         [HttpGet]
         public IActionResult Index(string searchString = null)
         {
+            var projectId = int.Parse(User.FindFirst("SelectedProjectId").Value);
             var priorityImages = new Dictionary<string, string>
             {
                 { "Высокий", "/img/priority/high.svg" },
@@ -32,12 +35,12 @@ namespace BugTrackerV1.Controllers
                 { "Низкий", "/img/priority/low.svg" }
             };
 
-            var model = _context.Issue.Select(i => new IssueViewModel
+            var model = _context.Issue.Where(x => x.ProjectId == projectId).Select(i => new IssueViewModel
             {
                 Id = i.Id,
                 Title = i.Title,
-                CreatedBy = i.CreatedBy,
-                AssignedTo = i.AssignedTo,
+                CreatedBy = new UserViewModel(i.CreatedBy),
+                AssignedTo = new UserViewModel(i.AssignedTo),
                 Priority = i.Priority.NamePriority,
                 PriorityImage = priorityImages.ContainsKey(i.Priority.NamePriority)
                                 ? priorityImages[i.Priority.NamePriority]
@@ -168,17 +171,25 @@ namespace BugTrackerV1.Controllers
                 Id = issue.Id,
                 Title = issue.Title,
                 Description = issue.Description,
-                CreatedBy = issue.CreatedBy.LastName,
-                AssignedTo = issue.AssignedTo?.LastName,
+                CreatedBy = new UserViewModel(issue.CreatedBy),
+                AssignedTo = new UserViewModel(issue.AssignedTo),
                 Priority = issue.Priority.NamePriority,
                 Status = issue.Status.NameStatus,
                 Type = issue.Type.NameType,
                 SprintId = issue.SprintId,
+                Labels = issue.LabelIssue.Select(x => x.Label.NameLabel).ToList(),
                 Sprints = _context.Sprint.Where(x => x.ProjectId == int.Parse(User.FindFirst("SelectedProjectId").Value)).Select(x => new SelectListItem
                 {
                     Value = x.Id.ToString(),
                     Text = x.NameSprint
                 }).ToList(),
+                Comments = issue.IssueComment.Select(x => new CommentViewModel 
+                {
+                    Id = x.Id,
+                    Text = x.Comment,
+                    UpdatedAt = x.UpdatedAt,
+                    User = new UserViewModel(x.User)
+                }).ToList()
             };
             model.Attachments = issue.IssueAttachment.Select(x => new FileViewModel 
             {
@@ -207,6 +218,35 @@ namespace BugTrackerV1.Controllers
 
 
             return RedirectToAction("Index", "Issue");
+        }
+
+
+        [HttpPost]
+        public IActionResult AddComment([FromBody] CommentViewModel commentViewModel)
+        {
+            var userId = int.Parse(_contextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var comment = new IssueComment
+            {
+                Comment = commentViewModel.Text,
+                CreatedAt = DateTime.Now,
+                CommentAuthorId = userId,
+                UpdatedAt = DateTime.Now,
+                IssueId = commentViewModel.IssueId,
+               
+            };
+            _context.IssueComment.Add(comment);
+            _context.SaveChanges();
+
+            var user = new UserViewModel(_context.User.FirstOrDefault(u => u.Id == userId)).ShortNameUser;
+
+            return Json(new
+            {
+                user,
+                text = comment.Comment,
+                issueId = comment.IssueId,
+                updatedAt = comment.UpdatedAt
+            });
         }
 
         public async Task<IActionResult> GetFile(string fileName)

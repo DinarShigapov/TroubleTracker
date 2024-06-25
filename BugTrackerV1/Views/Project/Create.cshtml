@@ -1,0 +1,60 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_BlankLayout";
+}
+
+@model BugTrackerV1.Models.ViewModel.ProjectVM.CreateProjectViewModel;
+
+
+@section VendorStyles {
+    <link rel="stylesheet" href="~/vendor/css/pages/project-style.css" asp-append-version="true"/>
+}
+
+<div class="container">
+    <div class="header-row mt-3">
+        <div class="back-button">
+            <a href="javascript:history.back()">&larr; Назад</a>
+        </div>
+        <div class="app-brand site">
+            <span class="app-brand-logo site">
+                @await Html.PartialAsync("../_Partials/_Macros")
+            </span>
+            <span class="app-brand-text site menu-text fw-bold ms-2">@TempData.Peek("appName")</span>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="row w-100">
+            <div class="col-4 mx-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="mb-2">Создание проекта</h5>
+                        <form id="formAuthentication" asp-action="Create" method="POST" class="mb-3">
+                            <div class="mb-3">
+                                <label asp-for="Title" class="form-label">Название</label>
+                                <input asp-for="Title" class="form-control" placeholder="Введите название" autofocus>
+                                <small><span asp-validation-for="Title" class="text-danger"></span></small>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Description" class="form-label">Описание</label>
+                                <textarea class="form-control" id="description" asp-for="Description" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Key" class="form-label">Ключ</label>
+                                <input asp-for="Key" class="form-control" placeholder="Введите ключ" autofocus>
+                                <small><span asp-validation-for="Key" class="text-danger"></span></small>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary d-grid w-100" type="submit">Создать</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <img src="~/img/illustrations/projectIllust.svg" class="img-fluid" alt="Image">
+            </div>
+        </div>
+    </div>
+</div>

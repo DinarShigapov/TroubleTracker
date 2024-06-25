@@ -14,7 +14,6 @@ namespace BugTrackerV1.Controllers
     {
         private ApplicationContext _context;
 
-
         public ActiveSprintController(ApplicationContext context)
         {
             _context = context;
@@ -27,6 +26,7 @@ namespace BugTrackerV1.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            var projectId = int.Parse(User.FindFirst("SelectedProjectId").Value);
 
             var priorityImages = new Dictionary<string, string>
             {
@@ -41,38 +41,40 @@ namespace BugTrackerV1.Controllers
                 { "История", "/img/status/history-status.svg" },
                 { "Задача", "/img/status/task-status.svg" }
             };
-
             var buffer = await _context.IssueStatus.ToListAsync();
-            var activesprint = _context.Sprint.FirstOrDefault(x => x.Project.ActiveSprintId == x.Id);
-
             var viewmodel = new KanbanViewModel();
             viewmodel.Kanbans = new List<KanbanColumnViewModel>();
 
-            var list = buffer.Select(x => new KanbanColumnViewModel()
+
+            if (_context.Project.Any(x => x.Id == projectId && x.Sprint != null))
             {
-                StatusId = x.Id,
-                NameStatus = x.NameStatus,
-                Cards = x.Issue.Select(z => new KanbanCardViewModel()
+                var activesprint = _context.Sprint.FirstOrDefault(x => x.Project.ActiveSprintId == x.Id && x.ProjectId == projectId);
+
+                var list = buffer.Select(x => new KanbanColumnViewModel()
                 {
-                    Id = z.Id,
-                    Title = z.Title,
-                    AssignedTo = z.AssignedTo.ToString(),
-                    Description = z.Description,
-                    Status = z.Status.NameStatus,
-                    Priority = z.Priority.NamePriority,
-                    Type = z.Type.NameType,
-                    TypeImage = typeImages.ContainsKey(z.Type.NameType)
-                                ? typeImages[z.Type.NameType]
-                                : "/images/priority-default.png",
-                    PriorityImage = priorityImages.ContainsKey(z.Priority.NamePriority)
-                                ? priorityImages[z.Priority.NamePriority]
-                                : "/images/priority-default.png",
+                    StatusId = x.Id,
+                    NameStatus = x.NameStatus,
+                    Cards = x.Issue.Where(c => c.ProjectId == projectId && c.SprintId == activesprint.Id).Select(z => new KanbanCardViewModel()
+                    {
+                        Id = z.Id,
+                        Title = z.Title,
+                        AssignedTo = z.AssignedTo.ToString(),
+                        Description = z.Description,
+                        Status = z.Status.NameStatus,
+                        Priority = z.Priority.NamePriority,
+                        Type = z.Type.NameType,
+                        TypeImage = typeImages.ContainsKey(z.Type.NameType)
+                                    ? typeImages[z.Type.NameType]
+                                    : "/images/priority-default.png",
+                        PriorityImage = priorityImages.ContainsKey(z.Priority.NamePriority)
+                                    ? priorityImages[z.Priority.NamePriority]
+                                    : "/images/priority-default.png",
 
-                }).ToList()
-            }).ToList();
+                    }).ToList()
+                }).ToList();
+                viewmodel.Kanbans = list.ToList();
 
-
-            viewmodel.Kanbans = list.ToList();
+            }
 
             return View(viewmodel);
         }
@@ -85,7 +87,7 @@ namespace BugTrackerV1.Controllers
             {
                 card.StatusId = newStatusId;
                 _context.SaveChanges();
-                return Content("Success");
+                return RedirectToAction("Index");
             }
 
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace BugTrackerV1.Models.ViewModel.Issue
+namespace BugTrackerV1.Models.ViewModel.IssueVM
 {
     public class DetailIssueViewModel
     {
@@ -12,12 +12,13 @@ namespace BugTrackerV1.Models.ViewModel.Issue
         public string Priority { get; set; }
         public string Status { get; set; }
         public string Type { get; set; }
-        public string CreatedBy { get; set; }
-        public string AssignedTo { get; set; }
+        public UserViewModel CreatedBy { get; set; }
+        public UserViewModel? AssignedTo { get; set; }
         public int? SprintId { get; set; }
         public IEnumerable<SelectListItem> Sprints { get; set; } = Enumerable.Empty<SelectListItem>();
-        public IEnumerable<SelectListItem> Labels { get; set; }
+        public List<string> Labels { get; set; } = new List<string>();
         public List<FileViewModel> Attachments { get; set; } = new List<FileViewModel>();
-        public List<IssueComment> Comments { get; set; } = new List<IssueComment>();
+        public CommentViewModel Comment { get; set; }
+        public List<CommentViewModel> Comments { get; set; } = new List<CommentViewModel>();
     }
 }

@@ -9,16 +9,21 @@
     <link rel="stylesheet" href="~/vendor/css/pages/page-project.css">
 }
 
+@section VendorScripts {
+    <script src="~/vendor/js/project-script.js" asp-append-version="true"></script>
+}
+
+
 @model List<BugTrackerV1.Models.Project>
 
 
 <div class="container">
-    <h1>Проекты</h1>
-    <div class="search-bar">
-        <input type="text" placeholder="Поиск проектов">
+    <div class="d-flex bd-highlight mb-2">
+        <h1 class="me-auto p-2 bd-highlight">Проекты</h1>
+        <button class="btn btn-primary buttonSize" onclick="location.href='@Url.Action("Create", "Project")'">Создать проект</button>
     </div>
-    <div class="actions">
-        <button class="btn-create">Создать проект</button>
+    <div class="search-bar">
+        <input id="searchInput" type="search" oninput="filterTable()" placeholder="Поиск проектов">
     </div>
     <table>
         <thead>
@@ -30,7 +35,7 @@
                 <th>Дополнительные действия</th>
             </tr>
         </thead>
-        <tbody >
+        <tbody id="tableBody">
             @foreach (var project in Model)
             {
                 <tr>
@@ -43,11 +48,11 @@
                         </form>
                     </td>
                     <td>@project.KeyProject</td>
-                    <td>FSDFDSFSDF</td>
+                    <td>Проект</td>
                     <td>
-                        @project.User.LastName
+                        @project.User.ShortNameUser
                     </td>
-                    <td><a href="#">...</a></td>
+                    <td><a href="@Url.Action("Edit", "Project", new {projectId = project.Id})">...</a></td>
                 </tr>
             }
         </tbody>

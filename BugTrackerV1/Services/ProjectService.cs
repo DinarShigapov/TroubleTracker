@@ -19,7 +19,7 @@ namespace BugTrackerV1.Services
 
         public List<Project> GetProjectsForUser(int userId)
         {
-            return _context.Project.Where(p => p.ProjectUsers.Any(u => u.Id == userId)).ToList();
+            return _context.ProjectUsers.Where(x => x.UserId == userId).Select(x => x.Project).ToList();
         }
         public async void SetSelectedProject(int projectId, HttpContext context)
         {

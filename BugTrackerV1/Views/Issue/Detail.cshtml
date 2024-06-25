@@ -4,19 +4,60 @@
 @{
 }
 @section VendorScripts {
-    <script src="~/vendor/js/issue-script.js"></script>
+    <script src="~/vendor/js/issue-script.js" asp-append-version="true"></script>
 }
+
 
 @section VendorStyles {
-    <link rel="stylesheet" href="~/vendor/css/pages/issue-style.css" />
+    <link rel="stylesheet" href="~/vendor/css/pages/issue-style.css" asp-append-version="true" />
+}
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#addComment').click(function () {
+                var commentText = $('#commentText').val();
+                var tempCommentId = 'temp-' + Date.now();
+                var issueId = '@Model.Id';
+
+                $('#comments').append(
+                    '<div class="comment" id="' + tempCommentId + '">' +
+                    '<p><strong>Loading...</strong>: ' + commentText + '</p>' +
+                    '<p><small>Sending...</small></p>' +
+                    '</div>'
+                );
+
+                $.ajax({
+                    url: '@Url.Action("AddComment", "Issue")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        Text: commentText,
+                        IssueId: issueId
+                    }),
+                    success: function (comment) {
+                        $('#' + tempCommentId).html(
+                            '<p><strong>' + comment.user + '</strong>: ' + comment.text + '</p>'
+                        );
+                        $('#commentText').val('');
+                    },
+                    error: function () {
+                        $('#' + tempCommentId).remove();
+                        alert('Failed to add comment. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
 }
 
-@model BugTrackerV1.Models.ViewModel.Issue.DetailIssueViewModel
+
+
+@model BugTrackerV1.Models.ViewModel.IssueVM.DetailIssueViewModel
 
 <div class="container-fluid">
     <div class="bg-light task-main p-4 py-4 rounded-3">
-        <form asp-controller="Issue" asp-action="Detail">
-          <div class="row task-details">
+        <div class="row task-details">
             <div class="col-md-8">
                 <div class="form-group">
                     <label>Название задачи:</label>
@@ -43,62 +84,60 @@
                                         <div class="attachment-file">Файл</div>
                                     }
                                 </div>
-
                             }
                         </div>
                     </div>
                 </div>
-                 <div class="form-group">
-                        <h4 class="mt-4">Активность</h4>
-                        <div class="btn-group mb-3" role="group" aria-label="Activity buttons">
-                            <button type="button" class="btn btn-secondary" onclick="showActivity('all')">Все</button>
-                            <button type="button" class="btn btn-secondary" onclick="showActivity('comments')">Комментарии</button>
-                            <button type="button" class="btn btn-secondary" onclick="showActivity('history')">История</button>
-                        </div>
+                <div class="form-group">
+                    <h4 class="mt-4">Активность</h4>
+                    <div class="btn-group mb-3" role="group" aria-label="Activity buttons">
+                        <button type="button" class="btn btn-secondary" onclick="showActivity('commentContent')">Комментарии</button>
+                        <button type="button" class="btn btn-secondary" onclick="showActivity('history')">История</button>
+                    </div>
 
-                        <div id="all-activities" class="activity-content">
-                            <div id="commentList"></div>
-                            <div id="historyContent">No history available.</div>
-                            <div id="worklogContent">No work log available.</div>
-                        </div>
 
-                        <div id="comments" class="activity-content d-none">
-                            <h5>Добавить комментарий</h5>
-                            <form onsubmit="addComment(event)">
-                                <div class="form-group">
-                                    <textarea id="newComment" class="form-control" rows="3"></textarea>
+                    <div id="commentContent" class="activity-content">
+                        <h5>Добавить комментарий</h5>
+                        <div class="input-group">
+                            <input type="text" id="commentText" class="form-control" placeholder="Написать комментарий..." />
+                            <button id="addComment" class="btn btn-outline-secondary">Отправить</button>
+                        </div>
+                        <h5 class="mt-3">Комментарии</h5>
+                        <div id="comments" class="overflow-auto border rounded p-2 " style="height: 150px;">
+                            @foreach (var comment in Model.Comments)
+                            {
+                                <div class="comment">
+                                    <p><strong>@comment.User.ShortNameUser</strong>: @comment.Text</p>
                                 </div>
-                                <button type="button" class="btn mt-3 btn-primary">Отправить</button>
-                            </form>
-                            <h5 class="mt-3">Комментарии</h5>
-                            <div id="commentList"></div>
-                        </div>
-
-                        <div id="history" class="activity-content d-none">
-                            <h5>История изменений</h5>
-                            <p>No history available.</p>
+                            }
                         </div>
                     </div>
+
+                    <div id="history" class="activity-content d-none">
+                        <h5>История изменений</h5>
+                        <p>No history available.</p>
+                    </div>
+                </div>
             </div>
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Дополнительная информация</h5>
                         <div class="form-group">
-                            <label>Исполнитель:</label>
-                            <label></label>
+                            <label asp-for="AssignedTo">Исполнитель:</label>
+                            <label>@Model.AssignedTo.ShortNameUser</label>
                         </div>
                         <div class="form-group">
                             <label asp-for="CreatedBy">Автор:</label>
-                            <label>@Model.CreatedBy</label>
+                            <label>@Model.CreatedBy.ShortNameUser</label>
                         </div>
                         <div class="form-group">
                             <label for="taskLabels">Метки:</label>
                             @if (Model.Labels != null)
                             {
-                            @foreach (var item in Model.Labels)
+                                @foreach (var item in Model.Labels)
                                 {
-                            <div>@item.Text</div>
+                                    <div class="badge rounded-pill bg-primary text-white px-3">@item</div>
                                 }
                             }
                         </div>
@@ -106,17 +145,17 @@
                             <label asp-for="Priority">Приоритет:</label>
                             <label>@Model.Priority</label>
                         </div>
-                        @Html.Hidden("Id", Model.Id)
+                        <form asp-controller="Issue" asp-action="Detail">
+                            @Html.Hidden("Id", Model.Id)
                             <label asp-for="SprintId">Тип задачи:</label>
                             <select class="form-control" asp-for="SprintId" asp-items="Model.Sprints">
                                 <option value="NOSELECTEDVALUE">Выберите спринт</option>
                             </select>
-                            <button type="submit" class="btn btn-primary" id="saveButton">Сохранить</button>
-
+                            <button type="submit" class="btn btn-primary my-2" id="saveButton">Сохранить</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-        </form>
     </div>
 </div>

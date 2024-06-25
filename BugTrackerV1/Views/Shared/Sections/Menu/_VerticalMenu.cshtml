@@ -15,7 +15,7 @@
 
 
     <div class='app-brand site @((@ViewData["navbarFull"] != null && Convert.ToBoolean(@ViewData["navbarFull"])) ? "d-xl-none" : "")'>
-        <img src="~/img/icons/unicons/projecticon.png" id="project-icon" />
+        <a href="@Url.Action("Index", "Project")"><img src="~/img/icons/unicons/projecticon.png" id="project-icon" /></a>
         <div>ProjectTest</div>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>

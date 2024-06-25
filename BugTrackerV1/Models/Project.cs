@@ -14,7 +14,7 @@ namespace BugTrackerV1.Models
         public int Id { get; set; }
         public string NameProject { get; set; }
         public string KeyProject { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public int ProjectManagerId { get; set; }
         public DateTime CreatedAt { get; set; }
         public int? ActiveSprintId { get; set; }

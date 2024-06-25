@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
-namespace BugTrackerV1.Models.ViewModel.Issue
+namespace BugTrackerV1.Models.ViewModel.IssueVM
 {
     public class CreateIssueViewModel
     {

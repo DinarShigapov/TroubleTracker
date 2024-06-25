@@ -159,6 +159,11 @@ namespace BugTrackerV1.Models
                 .WithMany(i => i.LabelIssue)
                 .HasForeignKey(li => li.IssueId);
 
+            modelBuilder.Entity<Label>()
+                .HasOne(li => li.User)
+                .WithMany(i => i.Label)
+                .HasForeignKey(li => li.CreatedById);
+
             modelBuilder.Entity<StepsToReproduce>()
                 .HasOne(str => str.Issue)
                 .WithMany(i => i.StepsToReproduce)

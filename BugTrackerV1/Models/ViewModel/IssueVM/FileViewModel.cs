@@ -1,4 +1,4 @@
-﻿namespace BugTrackerV1.Models.ViewModel.Issue
+﻿namespace BugTrackerV1.Models.ViewModel.IssueVM
 {
     public class FileViewModel
     {

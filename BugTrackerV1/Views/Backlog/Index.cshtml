@@ -18,13 +18,15 @@
     <div class="bg-light task-main p-3 rounded-3">
         <div class="d-flex bd-highlight mb-2">
             <h2 class="me-auto p-2 bd-highlight">Активный спринт: @Model.ActiveSprint.NameSprint (@Model.ActiveSprint.StartDate.ToShortDateString() - @Model.ActiveSprint.EndDate.ToShortDateString())</h2>
-            <button class="btn btn-secondary" onclick="location.href='@Url.Action("CompleteSprint", new { id = Model.ActiveSprint.Id })'">Завершить</button>
+            <button class="btn btn-secondary buttonSize" onclick="location.href='@Url.Action("CompleteSprint", new { sprintId = Model.ActiveSprint.Id })'">Завершить</button>
         </div>
         <ul class="list-group">
             @foreach (var task in Model.ActiveSprint.Issue)
             {
                 <li class="list-group-item d-flex bd-highlight">
-                    <label class="bd-highlight">#@task.Id</label>
+                    <label class="bd-highlight">
+                        <a href="@Url.Action("Detail", "Issue", new {issueId = task.Id})">#@task.Id</a>
+                    </label>
                     <label class="mx-4 bd-highlight">@task.Title</label>
                     <label class="ms-auto bd-highlight">@task.Status.NameStatus</label>
                 </li>
@@ -38,12 +40,15 @@
     <div class="bg-light task-main p-3 rounded-3">
         <div class="d-flex bd-highlight mb-2">
             <h2 class="me-auto p-2 bd-highlight">@sprint.NameSprint (@sprint.StartDate.ToShortDateString() - @sprint.EndDate.ToShortDateString())</h2>
+            <button class="btn btn-secondary buttonSize" onclick="location.href='@Url.Action("SetStartSprint", new { sprintId = sprint.Id })'">Установить</button>
         </div>
         <ul class="list-group">
             @foreach (var task in sprint.Issue)
             {
                 <li class="list-group-item d-flex bd-highlight">
-                    <label class="bd-highlight">#@task.Id</label>
+                    <label class="bd-highlight">
+                        <a href="@Url.Action("Detail", "Issue", new {issueId = task.Id})">#@task.Id</a>
+                    </label>
                     <label class="mx-4 bd-highlight">@task.Title</label>
                     <label class="ms-auto bd-highlight">@task.Status.NameStatus</label>
                 </li>
@@ -55,13 +60,15 @@
 <div class="my-4 bg-light task-main p-3 rounded-3">
     <div class="d-flex bd-highlight mb-2">
         <h2 class="me-auto p-2 bd-highlight">Бэклог</h2>
-        <button class="btn btn-secondary p-2 bd-highlight" onclick="location.href='@Url.Action("CreateSprint", "Backlog")'">Создать спринт</button>
+        <button class="btn btn-secondary p-2 bd-highlight buttonSize" onclick="location.href='@Url.Action("CreateSprint", "Backlog")'">Создать спринт</button>
     </div>
     <ul class="list-group">
         @foreach (var task in Model.BacklogTasks)
         {
             <li class="list-group-item d-flex bd-highlight">
-                <label class="bd-highlight">#@task.Id</label>
+                <label class="bd-highlight">
+                    <a href="@Url.Action("Detail", "Issue", new {issueId = task.Id})">#@task.Id</a>
+                </label>
                 <label class="mx-4 bd-highlight">@task.Title</label>
                 <label class="ms-auto bd-highlight">@task.Status.NameStatus</label>
             </li>

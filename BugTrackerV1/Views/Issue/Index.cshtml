@@ -1,4 +1,5 @@
-﻿@*
+﻿
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
@@ -8,7 +9,12 @@
 }
 @section VendorScripts {
     <script src="~/vendor/js/issue-script.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 }
+
+
+
+@model List<BugTrackerV1.Models.ViewModel.IssueVM.IssueViewModel>;
 
 <div class="container-fluid">
     <div class="bg-light p-4 rounded-3">
@@ -16,14 +22,6 @@
             <form asp-controller="Issue" asp-action="Index">
                 <div class="input-group mb-3">
                     <input id="searchInput" name="SearchString" type="search" class="form-control" placeholder="Поиск..." aria-label="Search..." aria-describedby="search-addon" oninput="filterTable()" />
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-outline-secondary">
-                            <i class="fas fa-search"></i>
-                        </button>
-                        <a class="btn btn-outline-secondary" href="@Url.Action("Create", "Issue")" role="button">
-                            <i class="fas fa-plus"></i>
-                        </a>
-                    </div>
                 </div>
             </form>
         </div>
@@ -40,20 +38,22 @@
                         <th>Статус</th>
                     </tr>
                 </thead>
-                <tbody id="issueTableBody">
+                <tbody id="tableBody">
                     @foreach (var issue in Model)
                     {
                         <tr class="alert" role="alert">
-                            <td><span>#@issue.Id</span></td>
-                            <td>
-                                <div class="email">
-                                    <span>
-                                        <a href="@Url.Action("Detail", "Issue", new {issueId = issue.Id})">@issue.Title</a>
-                                    </span>
+                            <td><a href="@Url.Action("Detail", "Issue", new {issueId = issue.Id})">#@issue.Id</a></td>
+                            <td class="text-nowrap">
+                                <div>
+                                    <a class="text-nowrap">@issue.Title</a>
                                 </div>
                             </td>
-                            <td><div class="email"><span>@issue.CreatedByFullName</span></div></td>
-                            <td>
+                            <td class="text-nowrap">
+                                <div>
+                                    @issue.CreatedBy.ShortNameUser
+                                </div>
+                            </td>
+                            <td class="text-nowrap">
                                 <div>
                                     @if (issue.AssignedTo == null)
                                     {
@@ -61,11 +61,11 @@
                                     }
                                     else
                                     {
-                                        <span>@issue.AssignedToFullName</span>
+                                        <span>@issue.AssignedTo.ShortNameUser</span>
                                     }
                                 </div>
                             </td>
-                            <td class="status">
+                            <td class="text-nowrap">
                                 <div class="priority row justify-content-start">
                                     <div class="icon col-1">
                                         <img class="priority-icon" src="@issue.PriorityImage" title="@issue.Priority" />
@@ -73,7 +73,7 @@
                                     <div class="col-2">@(issue.Priority)</div>
                                 </div>
                             </td>
-                            <td class="status">
+                            <td class="text-nowrap">
                                 @issue.Status
                             </td>
                         </tr>

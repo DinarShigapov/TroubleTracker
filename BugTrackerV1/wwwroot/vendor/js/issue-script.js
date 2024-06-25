@@ -87,7 +87,6 @@ document.getElementById('issueForm').onsubmit = async function (event) {
     }
 };
 
-// script.js
 function showTaskDetails(taskId, taskTitle, taskDescription) {
     document.getElementById('taskTitle').value = taskTitle;
     document.getElementById('taskDescription').value = taskDescription;
@@ -147,11 +146,11 @@ function changeStatus(status) {
 function filterTable() {
     const input = document.getElementById('searchInput');
     const filter = input.value.toLowerCase();
-    const tableBody = document.getElementById('issueTableBody');
+    const tableBody = document.getElementById('tableBody');
     const rows = tableBody.getElementsByTagName('tr');
 
     for (let i = 0; i < rows.length; i++) {
-        const titleCell = rows[i].getElementsByTagName('td')[1];
+        const titleCell = rows[i].getElementsByTagName('td')[0];
         if (titleCell) {
             const title = titleCell.textContent || titleCell.innerText;
             rows[i].style.display = title.toLowerCase().indexOf(filter) > -1 ? '' : 'none';

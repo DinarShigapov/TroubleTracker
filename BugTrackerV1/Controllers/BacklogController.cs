@@ -36,7 +36,7 @@ namespace BugTrackerV1.Controllers
                 .Where(sprint => sprint.EndDate >= today && sprint.StartDate >= today && sprint.Project.ActiveSprintId != sprint.Id).ToList();
 
 
-            var backlogTasks = _context.Issue.Where(t => t.SprintId == null).ToList();
+            var backlogTasks = _context.Issue.Where(t => t.SprintId == null && t.ProjectId == projectId).ToList();
 
             var viewModel = new BacklogViewModel
             {
@@ -58,6 +58,41 @@ namespace BugTrackerV1.Controllers
             };
             return View(model);
         }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> SetStartSprint(int sprintId) 
+        {
+            var card = await _context.Sprint.FirstOrDefaultAsync(x => x.Id == sprintId);
+            if (card.Project.ActiveSprintId == null)
+            {
+                card.Project.ActiveSprintId = card.Id;
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CompleteSprint(int sprintId) 
+        {
+            var card = await _context.Sprint.FirstOrDefaultAsync(x => x.Id == sprintId);
+            if (card.Project.ActiveSprintId != null)
+            {
+                card.Project.ActiveSprintId = null;
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

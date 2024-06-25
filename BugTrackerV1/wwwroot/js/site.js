@@ -28,3 +28,4 @@ function renderChart(ctx, data, label) {
 renderChart(document.getElementById('sprintChart').getContext('2d'), sprintData, 'Issues by Sprint');
 renderChart(document.getElementById('userChart').getContext('2d'), userData, 'Issues by User');
 renderChart(document.getElementById('projectChart').getContext('2d'), projectData, 'Issues by Project');
+

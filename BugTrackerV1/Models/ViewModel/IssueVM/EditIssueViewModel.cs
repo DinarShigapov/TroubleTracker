@@ -1,4 +1,4 @@
-﻿using BugTrackerV1.Models.ViewModel.Issue;
+﻿using BugTrackerV1.Models.ViewModel.IssueVM;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BugTrackerV1.Models.ViewModel.IssueVM
